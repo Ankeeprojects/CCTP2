@@ -261,6 +261,7 @@ public class HttpGw {
     }
     
     static public Boolean validaFich (String s) {
+        System.out.println("validando " + s);
         return s.substring(0, 2).equals("OK");
     }
     
@@ -360,8 +361,6 @@ public class HttpGw {
                     StackDetails s = new StackDetails (serverLock, fStackLock, fStackCondition,c);
                     FileDetails f = new FileDetails(nomeFicheiro, chunk, tamanho,out);
                     
-                    // TODO: Ir buscar metadados a partir da resposta anterior
-                    
                     out.write("HTTP/1.1 200 OK\r\n".getBytes());
                     out.write(("Content-Type: " + tipoFich + "\r\n").getBytes());
                     out.write(("Transfer-Encoding: chunked\r\n\r\n").getBytes());   
@@ -391,13 +390,16 @@ public class HttpGw {
                             serverLock.unlock();
                         }  
                          
-                } else
-                    //TODO RESPOSTA HTTP DE ERRO
+                } else {
+                    out.write(("HTTP/1.0 404 Not Found\r\n").getBytes());
+                    out.write(("Connection: close\r\n\r\n").getBytes());
+                    out.flush();
+                    out.close();
                     System.out.println("ERRO! O ficheiro não existe.");
-                    
-        } catch (IOException e) {}
+                }
+            } catch (IOException e) {}
          
-    }
+        }
     }
     
     public static void main (String[] args) throws SocketException, UnknownHostException, IOException {
@@ -412,6 +414,7 @@ public class HttpGw {
         
         while (true) {
             sock = serverSock.accept();
+            
             Thread worker = new Thread(new ChunkWorker(sock, lock, condition));
             
             worker.start();

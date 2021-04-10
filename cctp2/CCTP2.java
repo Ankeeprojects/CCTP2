@@ -87,16 +87,17 @@ public class CCTP2 {
                 if (quermeta(mensagem)) {
                     campos = mensagem.split(" ");
                     File f = new File (campos[1].substring(1));
-
+                    
                     if(f.exists()) {
                         System.out.println("Ficheiro " + campos[1] + " tem " + f.length() + " bytes e é do tipo " +
                                 Files.probeContentType(f.toPath()));
                         buf = ("OK " + f.length() + " " + Files.probeContentType(f.toPath()) + " ").getBytes();
                         pacote = new DatagramPacket(buf, buf.length, address, porta );      
                     } else {
+                        buf = ("NOTOK ").getBytes();
                         System.out.println("Tentei abrir " + campos[1] + " mas não deu");
                     }
-                    
+                    pacote = new DatagramPacket(buf, buf.length, address, porta );
                     socket.send(pacote);
                     
                 } else if (querdados(mensagem)) {
