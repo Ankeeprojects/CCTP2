@@ -1,0 +1,12 @@
+#include "api.h"
+#include <stdlib.h>
+#include <stdio.h>
+
+int main () {
+	int * arr = malloc(12*sizeof(int));
+	fill(arr, 12, 42);
+
+	printf("Procurar por 42: %d, procurar por 10: %d\n",
+		find(arr, 12, 42), find (arr, 12, 10));
+	return 0;
+}
