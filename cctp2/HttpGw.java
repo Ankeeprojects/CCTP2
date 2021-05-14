@@ -20,6 +20,7 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
 import java.util.AbstractMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
@@ -33,6 +34,8 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.zip.CRC32;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -588,6 +591,9 @@ public class HttpGw {
     }
 
     public static void main (String[] args) throws SocketException, UnknownHostException, IOException, NoSuchAlgorithmException, KeyManagementException, Exception {
+        System.out.println(
+        InetAddress.getLocalHost().getHostAddress());
+        
         ServerSocket httpSock = new ServerSocket(8080);
         ServerSocket httpsSock = getServerSocket(new InetSocketAddress("localhost", 8181));
         DatagramSocket s = new DatagramSocket(9999, InetAddress.getByName("localhost"));
